@@ -1,0 +1,8 @@
+apiVersion: k8s.io/v1
+kind: FooBar
+metadata:
+  name: foobar-sample
+spec:
+  foo: barz
+  bar: "false"
+  command: "echo foobar"
