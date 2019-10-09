@@ -17,17 +17,19 @@ sudo mv /tmp/kubebuilder_2.0.1_${os}_${arch} /usr/local/kubebuilder
 export PATH=$PATH:/usr/local/kubebuilder/bin
 ```
 
-## Create a Project
+## Step-by-step write CR
+
+### 1. 初始化项目
 
 ```bash
-cd $GOPATH/src
+cd $GOPATH/src/github.com/lqshow/k8s-custom-controllers/foobar-kubebuilder
 kubebuilder init --domain basebit.me  --owner "LQ"
 ```
 
-## Create an API
+### 2. 创建 API
 
 ```bash
-kubebuilder create api --group enigma --version v1 --kind DagNodeRunner
+kubebuilder create api --group samplecrd --version v1 --kind FooBar
 ```
 
 

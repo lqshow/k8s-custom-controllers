@@ -1,0 +1,7 @@
+version: "2"
+domain: basebit.me
+repo: github.com/lqshow/k8s-custom-controllers/foobar-kubebuilder
+resources:
+- group: samplecrd
+  version: v1
+  kind: FooBar
