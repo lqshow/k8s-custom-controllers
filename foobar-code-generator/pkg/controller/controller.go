@@ -2,9 +2,9 @@ package controller
 
 import (
 	"fmt"
+	"go.uber.org/zap"
 	"time"
 
-	"github.com/golang/glog"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -26,12 +26,12 @@ import (
 const controllerAgentName = "foobar-controller"
 
 const (
-	// SuccessSynced is used as part of the Event 'reason' when a Network is synced
+	// SuccessSynced is used as part of the Event 'reason' when a Foobar is synced
 	SuccessSynced = "Synced"
 
-	// MessageResourceSynced is the message used for an Event fired when a Network
+	// MessageResourceSynced is the message used for an Event fired when a Foobar
 	// is synced successfully
-	MessageResourceSynced = "Network synced successfully"
+	MessageResourceSynced = "Foobar synced successfully"
 )
 
 // Controller is the controller implementation for Foobar resources
@@ -63,7 +63,7 @@ func NewController(
 	foobarInformer informers.FooBarInformer) *Controller {
 
 	eventBroadcaster := record.NewBroadcaster()
-	eventBroadcaster.StartLogging(glog.Infof)
+	eventBroadcaster.StartLogging(zap.S().Infof)
 	eventBroadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface: kubeClientSet.CoreV1().Events("")})
 
 	recorder := eventBroadcaster.NewRecorder(scheme.Scheme, corev1.EventSource{Component: controllerAgentName})
@@ -167,14 +167,14 @@ func (c *Controller) processNextWorkItem() bool {
 			return nil
 		}
 		// Run the syncHandler, passing it the namespace/name string of the
-		// Network resource to be synced.
+		// Foobar resource to be synced.
 		if err := c.syncHandler(key); err != nil {
 			return fmt.Errorf("error syncing '%s': %s", key, err.Error())
 		}
 		// Finally, if no error occurs we Forget this item so it does not
 		// get queued again until another change happens.
 		c.workqueue.Forget(obj)
-		glog.Infof("Successfully synced '%s'", key)
+		zap.S().Infof("Successfully synced '%s'", key)
 		return nil
 	}(obj)
 
@@ -187,7 +187,7 @@ func (c *Controller) processNextWorkItem() bool {
 }
 
 // syncHandler compares the actual state with the desired, and attempts to
-// converge the two. It then updates the Status block of the Network resource
+// converge the two. It then updates the Status block of the Foobar resource
 // with the current status of the resource.
 func (c *Controller) syncHandler(key string) error {
 	// Convert the namespace/name string into a distinct namespace and name
@@ -197,42 +197,42 @@ func (c *Controller) syncHandler(key string) error {
 		return nil
 	}
 
-	// Get the Network resource with this namespace/name
-	network, err := c.foobarsLister.FooBars(namespace).Get(name)
+	// Get the FooBar resource with this namespace/name
+	foobar, err := c.foobarsLister.FooBars(namespace).Get(name)
 	if err != nil {
-		// The Network resource may no longer exist, in which case we stop
+		// The Foobar resource may no longer exist, in which case we stop
 		// processing.
 		if errors.IsNotFound(err) {
-			glog.Warningf("Network: %s/%s does not exist in local cache, will delete it from Neutron ...",
+			zap.S().Infof("Foobar: %s/%s does not exist in local cache, will delete it from Neutron ...",
 				namespace, name)
 
-			glog.Infof("[Neutron] Deleting network: %s/%s ...", namespace, name)
+			zap.S().Infof("[Neutron] Deleting foobar: %s/%s ...", namespace, name)
 
-			// FIX ME: call Neutron API to delete this network by name.
+			// FIX ME: call Neutron API to delete this foobar by name.
 			//
 			// neutron.Delete(namespace, name)
 
 			return nil
 		}
 
-		runtime.HandleError(fmt.Errorf("failed to list network by: %s/%s", namespace, name))
+		runtime.HandleError(fmt.Errorf("failed to list foobar by: %s/%s", namespace, name))
 
 		return err
 	}
 
-	glog.Infof("[Neutron] Try to process network: %#v ...", network)
+	zap.S().Infof("[Neutron] Try to process foobar: %#v ...", foobar)
 
 	// FIX ME: Do diff().
 	//
-	// actualNetwork, exists := neutron.Get(namespace, name)
+	// actualFoobar, exists := neutron.Get(namespace, name)
 	//
 	// if !exists {
 	// 	neutron.Create(namespace, name)
-	// } else if !reflect.DeepEqual(actualNetwork, network) {
+	// } else if !reflect.DeepEqual(actualFoobar, foobar) {
 	// 	neutron.Update(namespace, name)
 	// }
 
-	c.recorder.Event(network, corev1.EventTypeNormal, SuccessSynced, MessageResourceSynced)
+	c.recorder.Event(foobar, corev1.EventTypeNormal, SuccessSynced, MessageResourceSynced)
 	return nil
 }
 
@@ -245,23 +245,23 @@ func (c *Controller) Run(threadiness int, stopCh <-chan struct{}) error {
 	defer c.workqueue.ShutDown()
 
 	// Start the informer factories to begin populating the informer caches
-	glog.Info("Starting Network control loop")
-
+	zap.S().Info("Starting Foobar control loop")
 	// Wait for the caches to be synced before starting workers
-	glog.Info("Waiting for informer caches to sync")
+	zap.S().Info("Waiting for informer caches to sync")
 	if ok := cache.WaitForCacheSync(stopCh, c.foobarsSynced); !ok {
 		return fmt.Errorf("failed to wait for caches to sync")
 	}
 
-	glog.Info("Starting workers")
+	zap.S().Info("Starting workers")
 	// Launch two workers to process Foobar resources
 	for i := 0; i < threadiness; i++ {
 		go wait.Until(c.runWorker, time.Second, stopCh)
 	}
 
-	glog.Info("Started workers")
+	zap.S().Info("Started workers")
+	fmt.Println("Started workers")
 	<-stopCh
-	glog.Info("Shutting down workers")
+	zap.S().Info("Shutting down workers")
 
 	return nil
 }

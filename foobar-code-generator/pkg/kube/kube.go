@@ -1,13 +1,10 @@
 package kube
 
 import (
-	"k8s.io/client-go/rest"
-	"log"
-	"os"
-
+	"go.uber.org/zap"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-
 	//apiextensionv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	//apiextension "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	//apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -17,15 +14,16 @@ import (
 )
 
 const (
-	CRDPlural   string = "sslconfigs"
-	CRDGroup    string = "blog.velotio.com"
-	CRDVersion  string = "v1alpha1"
+	CRDPlural   string = "foobars"
+	CRDGroup    string = "k8s.io"
+	CRDVersion  string = "v1"
 	FullCRDName string = CRDPlural + "." + CRDGroup
 )
 
-func GetKubeConfig() (*rest.Config, error) {
-	// construct the path to resolve to `~/.kube/config`
-	kubeConfigPath := os.Getenv("HOME") + "/.kube/config"
+func GetKubeConfig(masterUrl, kubeConfigPath string) (*rest.Config, error) {
+	if kubeConfigPath == "" && masterUrl == "" {
+		return rest.InClusterConfig()
+	}
 
 	// create the config from the path
 	cfg, err := clientcmd.BuildConfigFromFlags("", kubeConfigPath)
@@ -34,24 +32,24 @@ func GetKubeConfig() (*rest.Config, error) {
 }
 
 // retrieve the Kubernetes cluster client from outside of the cluster
-func GetKubernetesClient() (kubernetes.Interface, clientset.Interface) {
-	cfg, err := GetKubeConfig()
+func GetKubernetesClient(masterURL, kubeConfigPath string) (kubernetes.Interface, clientset.Interface) {
+	cfg, err := GetKubeConfig(masterURL, kubeConfigPath)
 	if err != nil {
-		log.Fatalf("getClusterConfig: %v", err)
+		zap.S().Fatalf("getClusterConfig: %v", err)
 	}
 
 	// generate the client based off of the config
 	kubeClient, err := kubernetes.NewForConfig(cfg)
 	if err != nil {
-		log.Fatalf("getClusterConfig: %v", err)
+		zap.S().Fatalf("getClusterConfig: %v", err)
 	}
 
 	foobarClient, err := clientset.NewForConfig(cfg)
 	if err != nil {
-		log.Fatalf("getClusterConfig: %v", err)
+		zap.S().Fatalf("getClusterConfig: %v", err)
 	}
 
-	log.Print("Successfully constructed k8s client")
+	zap.S().Info("Successfully constructed k8s client")
 	return kubeClient, foobarClient
 }
 
