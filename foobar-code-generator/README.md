@@ -44,6 +44,28 @@ Tag 类型
 
 ## Step-by-step write CR
 
+1. 准备一个目录结构如下的项目
+2. 通过 “复制、粘贴、替换、code generator” 可快速生成新的 crd
+
+```bash
+➜   tree $GOPATH/src/github.com/lqshow/k8s-custom-controllers/foobar-code-generator
+.
+├── artifacts
+│   └── examples
+│       ├── foobar-crd.yaml
+│       └── foobar-example.yaml
+├── go.mod
+├── go.sum
+└── pkg
+    └── apis
+       └── foobar
+          ├── register.go
+          └── v1
+              ├── doc.go
+              ├── register.go
+              └── types.go 
+```
+
 ### 1. 初始化项目
 ```bash
 
@@ -116,13 +138,25 @@ Generating informers for foobar:v1 at github.com/lqshow/k8s-custom-controllers/f
 3. pkg/generated/informers
 4. pkg/apis/foobar/v1/zz_generated.deepcopy.go
        
+### 5. 编写自定义控制器代码
+
+1. 编写 main 函数
+2. 编写自定义控制器的定义
+3. 编写控制器的业务逻辑
+
+## Create FooBar Object in kubernetes
+
+```bash
+kubectl apply -f `PWD`/artifacts/examples/foobar-crd.yaml
+kubectl apply -f `PWD`/artifacts/examples/foobar-example.yaml
+```
 
 ## TODO
 
 1. 在 GO 工作区目录（例如$GOPATH/src） 执行命令会报以下错误，在当前目录下执行就没问题，很妖
 
 ```bash
-(⎈ |xdp-dev-context:dev)➜  src $GOPATH/src/k8s.io/code-generator/generate-groups.sh all "$ROOT_PACKAGE/pkg/generated" "$ROOT_PACKAGE/pkg/apis" "$CUSTOM_RESOURCE_NAME:$CUSTOM_RESOURCE_VERSION"
+➜  $GOPATH/src/k8s.io/code-generator/generate-groups.sh all "$ROOT_PACKAGE/pkg/generated" "$ROOT_PACKAGE/pkg/apis" "$CUSTOM_RESOURCE_NAME:$CUSTOM_RESOURCE_VERSION"
 Generating deepcopy funcs
 F1008 19:54:25.625104   96258 deepcopy.go:885] Hit an unsupported type invalid type for invalid type, from github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/apis/foobar/v1.FooBar
 ```

@@ -24,6 +24,14 @@ for {
 }
 ```
 
+![image](https://user-images.githubusercontent.com/8086910/66443576-3baee600-ea72-11e9-994c-28db8ce74ce7.png)
+
+### Informer
+
+1. Informer 与 API 对象是一一对应的
+2. Informer 其实就是一个带有本地缓存和索引机制的、可以注册 EventHandler 的 client。它是自定义控制器跟 APIServer 进行数据同步的重要组件。
+3. Informer 通过一种叫作 ListAndWatch 的方法，把 APIServer 中的 API 对象缓存在了本地，并负责更新和维护这个缓存。
+
 ## Workflow
 
 1. 编写 CRD
