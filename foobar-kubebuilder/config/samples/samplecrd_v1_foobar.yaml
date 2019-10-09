@@ -1,0 +1,7 @@
+apiVersion: samplecrd.basebit.me/v1
+kind: FooBar
+metadata:
+  name: foobar-sample
+spec:
+  # Add fields here
+  foo: bar
