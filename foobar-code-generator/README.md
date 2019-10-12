@@ -124,7 +124,7 @@ $GOPATH/src/k8s.io/code-generator/generate-groups.sh all "$ROOT_PACKAGE/pkg/gene
 ```
 
 ```bash
-➜  $GOPATH/src/k8s.io/code-generator/generate-groups.sh all "$ROOT_PACKAGE/pkg/generated" "$ROOT_PACKAGE/pkg/apis" "$CUSTOM_RESOURCE_NAME:$CUSTOM_RESOURCE_VERSION"
+➜  ./hack/codegen.sh
 Generating deepcopy funcs
 Generating clientset for foobar:v1alpha1 at github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/clientset
 Generating listers for foobar:v1alpha1 at github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/listers
