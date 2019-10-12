@@ -19,7 +19,7 @@ limitations under the License.
 package fake
 
 import (
-	foobarv1 "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/apis/foobar/v1"
+	v1alpha1 "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/apis/foobar/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -30,29 +30,29 @@ import (
 
 // FakeFooBars implements FooBarInterface
 type FakeFooBars struct {
-	Fake *FakeK8sV1
+	Fake *FakeSamplecrdV1alpha1
 	ns   string
 }
 
-var foobarsResource = schema.GroupVersionResource{Group: "k8s.io", Version: "v1", Resource: "foobars"}
+var foobarsResource = schema.GroupVersionResource{Group: "samplecrd.basebit.me", Version: "v1alpha1", Resource: "foobars"}
 
-var foobarsKind = schema.GroupVersionKind{Group: "k8s.io", Version: "v1", Kind: "FooBar"}
+var foobarsKind = schema.GroupVersionKind{Group: "samplecrd.basebit.me", Version: "v1alpha1", Kind: "FooBar"}
 
 // Get takes name of the fooBar, and returns the corresponding fooBar object, and an error if there is any.
-func (c *FakeFooBars) Get(name string, options v1.GetOptions) (result *foobarv1.FooBar, err error) {
+func (c *FakeFooBars) Get(name string, options v1.GetOptions) (result *v1alpha1.FooBar, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewGetAction(foobarsResource, c.ns, name), &foobarv1.FooBar{})
+		Invokes(testing.NewGetAction(foobarsResource, c.ns, name), &v1alpha1.FooBar{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*foobarv1.FooBar), err
+	return obj.(*v1alpha1.FooBar), err
 }
 
 // List takes label and field selectors, and returns the list of FooBars that match those selectors.
-func (c *FakeFooBars) List(opts v1.ListOptions) (result *foobarv1.FooBarList, err error) {
+func (c *FakeFooBars) List(opts v1.ListOptions) (result *v1alpha1.FooBarList, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewListAction(foobarsResource, foobarsKind, c.ns, opts), &foobarv1.FooBarList{})
+		Invokes(testing.NewListAction(foobarsResource, foobarsKind, c.ns, opts), &v1alpha1.FooBarList{})
 
 	if obj == nil {
 		return nil, err
@@ -62,8 +62,8 @@ func (c *FakeFooBars) List(opts v1.ListOptions) (result *foobarv1.FooBarList, er
 	if label == nil {
 		label = labels.Everything()
 	}
-	list := &foobarv1.FooBarList{ListMeta: obj.(*foobarv1.FooBarList).ListMeta}
-	for _, item := range obj.(*foobarv1.FooBarList).Items {
+	list := &v1alpha1.FooBarList{ListMeta: obj.(*v1alpha1.FooBarList).ListMeta}
+	for _, item := range obj.(*v1alpha1.FooBarList).Items {
 		if label.Matches(labels.Set(item.Labels)) {
 			list.Items = append(list.Items, item)
 		}
@@ -79,31 +79,31 @@ func (c *FakeFooBars) Watch(opts v1.ListOptions) (watch.Interface, error) {
 }
 
 // Create takes the representation of a fooBar and creates it.  Returns the server's representation of the fooBar, and an error, if there is any.
-func (c *FakeFooBars) Create(fooBar *foobarv1.FooBar) (result *foobarv1.FooBar, err error) {
+func (c *FakeFooBars) Create(fooBar *v1alpha1.FooBar) (result *v1alpha1.FooBar, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewCreateAction(foobarsResource, c.ns, fooBar), &foobarv1.FooBar{})
+		Invokes(testing.NewCreateAction(foobarsResource, c.ns, fooBar), &v1alpha1.FooBar{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*foobarv1.FooBar), err
+	return obj.(*v1alpha1.FooBar), err
 }
 
 // Update takes the representation of a fooBar and updates it. Returns the server's representation of the fooBar, and an error, if there is any.
-func (c *FakeFooBars) Update(fooBar *foobarv1.FooBar) (result *foobarv1.FooBar, err error) {
+func (c *FakeFooBars) Update(fooBar *v1alpha1.FooBar) (result *v1alpha1.FooBar, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewUpdateAction(foobarsResource, c.ns, fooBar), &foobarv1.FooBar{})
+		Invokes(testing.NewUpdateAction(foobarsResource, c.ns, fooBar), &v1alpha1.FooBar{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*foobarv1.FooBar), err
+	return obj.(*v1alpha1.FooBar), err
 }
 
 // Delete takes name of the fooBar and deletes it. Returns an error if one occurs.
 func (c *FakeFooBars) Delete(name string, options *v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(foobarsResource, c.ns, name), &foobarv1.FooBar{})
+		Invokes(testing.NewDeleteAction(foobarsResource, c.ns, name), &v1alpha1.FooBar{})
 
 	return err
 }
@@ -112,17 +112,17 @@ func (c *FakeFooBars) Delete(name string, options *v1.DeleteOptions) error {
 func (c *FakeFooBars) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
 	action := testing.NewDeleteCollectionAction(foobarsResource, c.ns, listOptions)
 
-	_, err := c.Fake.Invokes(action, &foobarv1.FooBarList{})
+	_, err := c.Fake.Invokes(action, &v1alpha1.FooBarList{})
 	return err
 }
 
 // Patch applies the patch and returns the patched fooBar.
-func (c *FakeFooBars) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *foobarv1.FooBar, err error) {
+func (c *FakeFooBars) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.FooBar, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(foobarsResource, c.ns, name, pt, data, subresources...), &foobarv1.FooBar{})
+		Invokes(testing.NewPatchSubresourceAction(foobarsResource, c.ns, name, pt, data, subresources...), &v1alpha1.FooBar{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*foobarv1.FooBar), err
+	return obj.(*v1alpha1.FooBar), err
 }

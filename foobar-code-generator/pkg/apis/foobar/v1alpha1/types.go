@@ -1,4 +1,4 @@
-package v1
+package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -13,14 +13,14 @@ type FooBar struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   FooBarSpec `json:"spec"`
+	Spec FooBarSpec `json:"spec"`
 }
 
 // FooBarSpec is the spec for a FooBar resource
 type FooBarSpec struct {
-	Foo 		string  `json:"foo"`
-	Bar      	bool 	`json:"bar"`
-	Command     string  `json:"command"`
+	Foo     string `json:"foo"`
+	Bar     bool   `json:"bar"`
+	Command string `json:"command"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

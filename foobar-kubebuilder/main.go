@@ -20,7 +20,7 @@ import (
 	"flag"
 	"os"
 
-	samplecrdv1 "github.com/lqshow/k8s-custom-controllers/foobar-kubebuilder/api/v1"
+	samplecrdv1alpha2 "github.com/lqshow/k8s-custom-controllers/foobar-kubebuilder/api/v1alpha2"
 	"github.com/lqshow/k8s-custom-controllers/foobar-kubebuilder/controllers"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -38,7 +38,7 @@ var (
 func init() {
 	_ = clientgoscheme.AddToScheme(scheme)
 
-	_ = samplecrdv1.AddToScheme(scheme)
+	_ = samplecrdv1alpha2.AddToScheme(scheme)
 	// +kubebuilder:scaffold:scheme
 }
 

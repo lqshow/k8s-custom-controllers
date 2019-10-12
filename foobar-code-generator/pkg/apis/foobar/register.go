@@ -17,6 +17,6 @@ limitations under the License.
 package foobar
 
 const (
-	GroupName = "k8s.io"
-	Version   = "v1"
+	GroupName = "samplecrd.basebit.me"
+	Version   = "v1alpha1"
 )

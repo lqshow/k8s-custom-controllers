@@ -19,22 +19,22 @@ limitations under the License.
 package fake
 
 import (
-	v1 "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/clientset/versioned/typed/foobar/v1"
+	v1alpha1 "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/clientset/versioned/typed/foobar/v1alpha1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
 )
 
-type FakeK8sV1 struct {
+type FakeSamplecrdV1alpha1 struct {
 	*testing.Fake
 }
 
-func (c *FakeK8sV1) FooBars(namespace string) v1.FooBarInterface {
+func (c *FakeSamplecrdV1alpha1) FooBars(namespace string) v1alpha1.FooBarInterface {
 	return &FakeFooBars{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeK8sV1) RESTClient() rest.Interface {
+func (c *FakeSamplecrdV1alpha1) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }

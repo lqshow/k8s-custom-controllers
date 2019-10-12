@@ -17,10 +17,10 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	typedcorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 
-	foobarv1 "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/apis/foobar/v1"
+	foobarv1 "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/apis/foobar/v1alpha1"
 	clientset "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/clientset/versioned"
-	informers "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/informers/externalversions/foobar/v1"
-	listers "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/listers/foobar/v1"
+	informers "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/informers/externalversions/foobar/v1alpha1"
+	listers "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/listers/foobar/v1alpha1"
 )
 
 const controllerAgentName = "foobar-controller"

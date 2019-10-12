@@ -15,8 +15,8 @@ import (
 
 const (
 	CRDPlural   string = "foobars"
-	CRDGroup    string = "k8s.io"
-	CRDVersion  string = "v1"
+	CRDGroup    string = "samplecrd.basebit.me"
+	CRDVersion  string = "v1alpha1"
 	FullCRDName string = CRDPlural + "." + CRDGroup
 )
 

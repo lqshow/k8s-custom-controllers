@@ -20,8 +20,8 @@ package fake
 
 import (
 	clientset "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/clientset/versioned"
-	k8sv1 "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/clientset/versioned/typed/foobar/v1"
-	fakek8sv1 "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/clientset/versioned/typed/foobar/v1/fake"
+	samplecrdv1alpha1 "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/clientset/versioned/typed/foobar/v1alpha1"
+	fakesamplecrdv1alpha1 "github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/clientset/versioned/typed/foobar/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -76,7 +76,7 @@ func (c *Clientset) Tracker() testing.ObjectTracker {
 
 var _ clientset.Interface = &Clientset{}
 
-// K8sV1 retrieves the K8sV1Client
-func (c *Clientset) K8sV1() k8sv1.K8sV1Interface {
-	return &fakek8sv1.FakeK8sV1{Fake: &c.Fake}
+// SamplecrdV1alpha1 retrieves the SamplecrdV1alpha1Client
+func (c *Clientset) SamplecrdV1alpha1() samplecrdv1alpha1.SamplecrdV1alpha1Interface {
+	return &fakesamplecrdv1alpha1.FakeSamplecrdV1alpha1{Fake: &c.Fake}
 }

@@ -1,4 +1,4 @@
-apiVersion: samplecrd.basebit.me/v1
+apiVersion: samplecrd.basebit.me/v1alpha2
 kind: FooBar
 metadata:
   name: foobar-sample

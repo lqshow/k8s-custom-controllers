@@ -29,10 +29,29 @@ kubebuilder init --domain basebit.me  --owner "LQ"
 ### 2. 创建 API
 
 ```bash
-kubebuilder create api --group samplecrd --version v1 --kind FooBar
+kubebuilder create api --group samplecrd --version v1alpha2 --kind FooBar
 ```
 
+### 3. 安装 CRD 并启动 controller
 
+```bash
+make install
+make run
+```
+
+```bash
+➜  kubectl get crd foobars.samplecrd.basebit.me
+NAME                           CREATED AT
+foobars.samplecrd.basebit.me   2019-10-09T15:28:44Z
+```
+
+```bash
+kubectl apply -f config/samples/samplecrd_v1_foobar.yaml
+
+➜   kubectl get foobars.samplecrd.basebit.me
+NAME            AGE
+foobar-sample   3m
+```
 
 ## References
 

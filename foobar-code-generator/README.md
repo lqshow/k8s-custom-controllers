@@ -60,7 +60,7 @@ Tag 类型
     └── apis
        └── foobar
           ├── register.go
-          └── v1
+          └── v1alpha1
               ├── doc.go
               ├── register.go
               └── types.go 
@@ -71,7 +71,7 @@ Tag 类型
 
 mkdir `PWD`/foobar-code-generator && cd `PWD`/foobar-code-generator
 go mod init github.com/lqshow/k8s-custom-controllers/foobar-code-generator
-mkdir -p pkg/apis/foobar/v1
+mkdir -p pkg/apis/foobar/v1alpha1
 ```
 
 ### 2. 创建 register.go 文件，用来放置全局变量
@@ -80,23 +80,22 @@ mkdir -p pkg/apis/foobar/v1
 package foobar
 
 const (
-	GroupName = "k8s.io"
-	Version   = "v1"
+	GroupName = "samplecrd.basebit.me"
+	Version   = "v1alpha1"
 )
 ```
 ### 3. 初始化 crd 资源类型
 
 ```bash
-cd pkg/apis/foobar/v1
+cd pkg/apis/foobar/v1alpha1
 ```
 
 doc.go
 ```go
 // +k8s:deepcopy-gen=package
-// +groupName=k8s.io
+// +groupName=samplecrd.basebit.me
 
-// Package v1 is the v1 version of the API.
-package v1
+package v1alpha1
 ```
 
 types.go
@@ -118,7 +117,7 @@ ROOT_PACKAGE="github.com/lqshow/k8s-custom-controllers/foobar-code-generator"
 CUSTOM_RESOURCE_NAME="foobar"
 
 # API Version
-CUSTOM_RESOURCE_VERSION="v1"
+CUSTOM_RESOURCE_VERSION="v1alpha1"
 
 # 执行代码自动生成，其中 pkg/generated 是生成目标目录，pkg/apis 是类型定义目录
 $GOPATH/src/k8s.io/code-generator/generate-groups.sh all "$ROOT_PACKAGE/pkg/generated" "$ROOT_PACKAGE/pkg/apis" "$CUSTOM_RESOURCE_NAME:$CUSTOM_RESOURCE_VERSION"
@@ -127,16 +126,16 @@ $GOPATH/src/k8s.io/code-generator/generate-groups.sh all "$ROOT_PACKAGE/pkg/gene
 ```bash
 ➜  $GOPATH/src/k8s.io/code-generator/generate-groups.sh all "$ROOT_PACKAGE/pkg/generated" "$ROOT_PACKAGE/pkg/apis" "$CUSTOM_RESOURCE_NAME:$CUSTOM_RESOURCE_VERSION"
 Generating deepcopy funcs
-Generating clientset for foobar:v1 at github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/clientset
-Generating listers for foobar:v1 at github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/listers
-Generating informers for foobar:v1 at github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/informers
+Generating clientset for foobar:v1alpha1 at github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/clientset
+Generating listers for foobar:v1alpha1 at github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/listers
+Generating informers for foobar:v1alpha1 at github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/generated/informers
 ```
 
 自动生成的代码
 1. pkg/generated/clientset
 2. pkg/generated/listers
 3. pkg/generated/informers
-4. pkg/apis/foobar/v1/zz_generated.deepcopy.go
+4. pkg/apis/foobar/v1alpha1/zz_generated.deepcopy.go
        
 ### 5. 编写自定义控制器代码
 
@@ -158,7 +157,7 @@ kubectl apply -f `PWD`/artifacts/examples/foobar-example.yaml
 ```bash
 ➜  $GOPATH/src/k8s.io/code-generator/generate-groups.sh all "$ROOT_PACKAGE/pkg/generated" "$ROOT_PACKAGE/pkg/apis" "$CUSTOM_RESOURCE_NAME:$CUSTOM_RESOURCE_VERSION"
 Generating deepcopy funcs
-F1008 19:54:25.625104   96258 deepcopy.go:885] Hit an unsupported type invalid type for invalid type, from github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/apis/foobar/v1.FooBar
+F1008 19:54:25.625104   96258 deepcopy.go:885] Hit an unsupported type invalid type for invalid type, from github.com/lqshow/k8s-custom-controllers/foobar-code-generator/pkg/apis/foobar/v1alpha1.FooBar
 ```
 
 ## References

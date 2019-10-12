@@ -23,7 +23,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	samplecrdv1 "github.com/lqshow/k8s-custom-controllers/foobar-kubebuilder/api/v1"
+	samplecrdv1alpha2 "github.com/lqshow/k8s-custom-controllers/foobar-kubebuilder/api/v1alpha2"
 )
 
 // FooBarReconciler reconciles a FooBar object
@@ -46,6 +46,6 @@ func (r *FooBarReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 
 func (r *FooBarReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&samplecrdv1.FooBar{}).
+		For(&samplecrdv1alpha2.FooBar{}).
 		Complete(r)
 }
